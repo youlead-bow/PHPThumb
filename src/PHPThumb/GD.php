@@ -2,6 +2,8 @@
 
 namespace PHPThumb;
 
+use Exception;
+
 /**
  * PhpThumb : PHP Thumb Library <http://phpthumb.gxdlabs.com>
  * Copyright (c) 2009, Ian Selby/Gen X Design
@@ -83,7 +85,7 @@ class GD extends PHPThumb
      * @param string $fileName
      * @param array $options
      * @param array $plugins
-     * @throws \Exception
+     * @throws Exception
      */
     public function __construct(string $fileName, array $options = array(), array $plugins = array())
     {
@@ -1300,6 +1302,7 @@ class GD extends PHPThumb
      *
      * This function will throw exceptions for invalid images / mime-types
      *
+     * @throws Exception
      */
     protected function determineFormat()
     {
@@ -1308,9 +1311,9 @@ class GD extends PHPThumb
         // non-image files will return false
         if ($formatInfo === false) {
             if ($this->remoteImage) {
-                throw new \Exception("Could not determine format of remote image: {$this->fileName}");
+                throw new Exception("Could not determine format of remote image: {$this->fileName}");
             } else {
-                throw new \Exception("File is not a valid image: {$this->fileName}");
+                throw new Exception("File is not a valid image: {$this->fileName}");
             }
         }
 
@@ -1327,14 +1330,14 @@ class GD extends PHPThumb
                 $this->format = 'PNG';
                 break;
             default:
-                throw new \Exception("Image format not supported: {$mimeType}");
+                throw new Exception("Image format not supported: {$mimeType}");
         }
     }
 
     /**
      * Makes sure the correct GD implementation exists for the file type
      *
-     * @throws \Exception
+     * @throws Exception
      */
     protected function verifyFormatCompatiblity()
     {
@@ -1360,7 +1363,7 @@ class GD extends PHPThumb
             $isCompatible = $gdInfo['JPEG Support'];
 
             if (!$isCompatible) {
-                throw new \Exception("Your GD installation does not support {$this->format} image types");
+                throw new Exception("Your GD installation does not support {$this->format} image types");
             }
         }
     }
