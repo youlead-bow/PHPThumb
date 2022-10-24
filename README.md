@@ -18,7 +18,7 @@ re-initialize the class with every manipulation.
 
 ## Documentation / Help
 
-- [Documentation](http://wiki.github.com/masterexploder/PHPThumb/) - Your best friend, the library docs
+- [Documentation](https://github.com/masterexploder/PHPThumb/wiki) - Your best friend, the library docs
 
 ## License
 
