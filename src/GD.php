@@ -1341,6 +1341,9 @@ class GD extends PHPThumb
             case 'image/png':
                 $this->format = 'PNG';
                 break;
+            case 'image/webp':
+                $this->format = 'WEBP';
+                break;
             default:
                 throw new Exception("Image format not supported: {$mimeType}");
         }
