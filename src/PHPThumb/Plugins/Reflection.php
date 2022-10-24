@@ -2,6 +2,9 @@
 
 namespace PHPThumb\Plugins;
 
+use PHPThumb\PHPThumb;
+use PHPThumb\PluginInterface;
+
 /**
  * GD Reflection Lib Plugin Definition File
  *
@@ -33,7 +36,7 @@ namespace PHPThumb\Plugins;
  * @package PhpThumb
  * @subpackage Plugins
  */
-class Reflection implements \PHPThumb\PluginInterface
+class Reflection implements PluginInterface
 {
     protected $currentDimensions;
     protected $workingImage;
@@ -45,6 +48,7 @@ class Reflection implements \PHPThumb\PluginInterface
     protected $white;
     protected $border;
     protected $borderColor;
+    protected $reflectionHeight;
 
     public function __construct($percent, $reflection, $white, $border, $borderColor)
     {
@@ -56,10 +60,10 @@ class Reflection implements \PHPThumb\PluginInterface
     }
 
     /**
-     * @param \PHPThumb\PHPThumb $phpthumb
-     * @return \PHPThumb\PHPThumb
+     * @param PHPThumb $phpthumb
+     * @return PHPThumb
      */
-    public function execute($phpthumb)
+    public function execute(PHPThumb $phpthumb): PHPThumb
     {
         $this->currentDimensions = $phpthumb->getCurrentDimensions();
         $this->workingImage      = $phpthumb->getWorkingImage();
@@ -140,7 +144,7 @@ class Reflection implements \PHPThumb\PluginInterface
             );
         }
 
-        if ($this->border == true) {
+        if ($this->border) {
             $rgb          = $this->hex2rgb($this->borderColor, false);
             $colorToPaint = imagecolorallocate($this->workingImage, $rgb[0], $rgb[1], $rgb[2]);
 
@@ -234,11 +238,11 @@ class Reflection implements \PHPThumb\PluginInterface
     /**
      * Converts a hex color to rgb tuples
      *
-     * @return mixed
-     * @param  string $hex
-     * @param  bool   $asString
+     * @param string $hex
+     * @param bool $asString
+     * @return array|string|string[]
      */
-    protected function hex2rgb ($hex, $asString = false)
+    protected function hex2rgb (string $hex, bool $asString = false)
     {
         // strip off any leading #
         if (0 === strpos($hex, '#')) {

@@ -1,11 +1,12 @@
 {
-    "name": "masterexploder/phpthumb",
+    "name": "youlead-bow/phpthumb",
     "type": "library",
     "license": "MIT",
     "description": "A library for manipulating images in PHP.",
     "keywords": ["image", "resize", "rotate"],
     "require": {
-        "php": ">=5.3.0"
+        "php": ">=7.3.0",
+        "ext-gd": "*"
     },
     "homepage": "https://github.com/masterexploder/PHPThumb",
     "authors": [
