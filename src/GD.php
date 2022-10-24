@@ -104,6 +104,9 @@ class GD extends PHPThumb
             case 'PNG':
                 $this->oldImage = imagecreatefrompng($this->fileName);
                 break;
+            case 'WEBP':
+                $this->oldImage = imagecreatefromwebp($this->fileName);
+                break;
             case 'STRING':
                 $this->oldImage = imagecreatefromstring($this->fileName);
                 break;
@@ -852,7 +855,13 @@ class GD extends PHPThumb
                 if ($rawData === false) {
                     header('Content-type: image/jpeg');
                 }
-                imagejpeg($this->oldImage, null, $this->options['jpegQuality']);
+                imagejpeg($this->oldImage, null, $this->options['quality']);
+                break;
+            case 'WEBP':
+                if ($rawData === false) {
+                    header('Content-type: image/webp');
+                }
+                imagewebp($this->oldImage, null, $this->options['quality']);
                 break;
             case 'PNG':
             case 'STRING':
@@ -895,12 +904,12 @@ class GD extends PHPThumb
      * \RuntimeException is thrown.
      *
      * @param string $fileName The full path and filename of the image to save
-     * @param string|null $format   The format to save the image in (optional, must be one of [GIF,JPG,PNG]
+     * @param string|null $format   The format to save the image in (optional, must be one of [GIF,JPG,PNG,WEBP]
      * @return GD
      */
     public function save(string $fileName, string $format = null): GD
     {
-        $validFormats = array('GIF', 'JPG', 'PNG');
+        $validFormats = array('GIF', 'JPG', 'PNG', 'WEBP');
         $format = ($format !== null) ? strtoupper($format) : $this->format;
 
         if (!in_array($format, $validFormats)) {
@@ -942,7 +951,10 @@ class GD extends PHPThumb
                 imagegif($this->oldImage, $fileName);
                 break;
             case 'JPG':
-                imagejpeg($this->oldImage, $fileName, $this->options['jpegQuality']);
+                imagejpeg($this->oldImage, $fileName, $this->options['quality']);
+                break;
+            case 'WEBP':
+                imagewebp($this->oldImage, $fileName, $this->options['quality']);
                 break;
             case 'PNG':
                 imagepng($this->oldImage, $fileName);
@@ -967,7 +979,7 @@ class GD extends PHPThumb
         if (sizeof($this->options) == 0) {
             $defaultOptions = array(
                 'resizeUp'              => false,
-                'jpegQuality'           => 100,
+                'quality'           => 100,
                 'correctPermissions'    => false,
                 'preserveAlpha'         => true,
                 'alphaMaskColor'        => array (255, 255, 255),
@@ -1351,6 +1363,9 @@ class GD extends PHPThumb
             case 'JPG':
                 $isCompatible = isset($gdInfo['JPG Support']) || isset($gdInfo['JPEG Support']);
                 break;
+            case 'WEBP':
+                $isCompatible = isset($gdInfo['WebP Support']);
+                break;
             case 'PNG':
                 $isCompatible = $gdInfo[$this->format . ' Support'];
                 break;
@@ -1369,7 +1384,7 @@ class GD extends PHPThumb
     }
 
     /**
-     * Preserves the alpha or transparency for PNG and GIF files
+     * Preserves the alpha or transparency for WEBP, PNG and GIF files
      *
      * Alpha / transparency will not be preserved if the appropriate options are set to false.
      * Also, the GIF transparency is pretty skunky (the results aren't awesome), but it works like a
@@ -1398,7 +1413,7 @@ class GD extends PHPThumb
             imagesavealpha($this->workingImage, true);
         }
 
-        if ($this->format == 'PNG' && $this->options['preserveAlpha'] === true) {
+        if (in_array($this->format, ['WEBP', 'PNG']) && $this->options['preserveAlpha'] === true) {
             imagealphablending($this->workingImage, false);
 
             $colorTransparent = imagecolorallocatealpha(
