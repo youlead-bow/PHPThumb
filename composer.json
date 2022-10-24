@@ -25,9 +25,9 @@
     ],
 
     "autoload": {
-        "psr-0": {
-            "PHPThumb": "src",
-            "PHPThumb\\Tests": "tests"
+        "psr-4": {
+            "PHPThumb\\": "src/",
+            "PHPThumb\\Tests": "tests/"
         }
     }
 }

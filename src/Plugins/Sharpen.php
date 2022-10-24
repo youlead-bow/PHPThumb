@@ -51,6 +51,6 @@ class Sharpen implements PluginInterface
         $offset = 0;
 
         imageconvolution ($phpthumb->getWorkingImage(), $sharpenMatrix, $divisor, $offset);
-
+        return $phpthumb;
     }
 }
