@@ -116,6 +116,8 @@ class GD extends PHPThumb
             'width'  => imagesx($this->oldImage),
             'height' => imagesy($this->oldImage)
         );
+
+        imagepalettetotruecolor($this->oldImage);
     }
 
     public function __destruct()
